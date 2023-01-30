@@ -52,7 +52,7 @@ class lst {
         }
         int query(int node, int start, int end, int l, int r) {
             if (start > end || start > r || end < l) {
-                return 0;
+                return 0; // returning 0 is ok for sum and max queries, but not for min queries it should be INT_MAX
             }
             if (lazy[node] != 0) {
                 tree[node] += lazy[node];
