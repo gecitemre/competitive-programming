@@ -6,15 +6,15 @@ using namespace std;
 class lst {
     private:
         int size;
-        int *tree;
-        int *lazy;
-        function<int(int, int)> f;
+        long *tree;
+        long *lazy;
+        function<long(long, long)> f;
     public:
-        lst(int size, int array[], function<int(int, int)> f) : size(size), f(f) {
-            tree = new int[4 * size];
+        lst(int size, long array[], function<long(long, long)> f) : size(size), f(f) {
+            tree = new long[4 * size];
             build(1, 0, size - 1, array);
         }
-        void build(int node, int start, int end, int array[]) {
+        void build(int node, int start, int end, long array[]) {
             if (start == end) {
                 tree[node] = array[start];
             } else {
@@ -24,7 +24,7 @@ class lst {
                 tree[node] = f(tree[2 * node], tree[2 * node + 1]);
             }
         }
-        void update(int node, int start, int end, int idx, int val) {
+        void update(int node, int start, int end, int idx, long val) {
             if (start == end) {
                 tree[node] = val;
             } else {
@@ -45,8 +45,6 @@ class lst {
                 return tree[node];
             }
             int mid = (start + end) / 2;
-            int p1 = query(2 * node, start, mid, l, r);
-            int p2 = query(2 * node + 1, mid + 1, end, l, r);
-            return f(p1, p2);
+            return f(query(2 * node, start, mid, l, r), query(2 * node + 1, mid + 1, end, l, r));
         }
 };
