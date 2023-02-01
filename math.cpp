@@ -1,0 +1,1 @@
+#define isOdd(x) (x & 1)
