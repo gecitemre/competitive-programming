@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+using namespace std;
 
 class fenwick {
     private:
@@ -29,3 +30,10 @@ class fenwick {
             return sum(r) - sum(l - 1);
         }
 };
+
+int main() {
+    int N;
+    cin >> N;
+    long heights[N];
+
+}
