@@ -1,4 +1,3 @@
-#define isOdd(x) (x & 1)
 #define MOD 1000000007
 
 long fast_pow(long base, long exp) {
@@ -11,4 +10,12 @@ long fast_pow(long base, long exp) {
         exp >>= 1;
     }
     return res;
+}
+
+inline bool isOdd(int i) {
+    return i & 1;
+}
+
+inline bool isOdd(long i) {
+    return i % 2;
 }

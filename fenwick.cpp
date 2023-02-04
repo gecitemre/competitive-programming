@@ -2,26 +2,29 @@
 
 class fenwick {
     private:
+        int size;
         long *tree;
-        void add(long val, int x, int size) {
-            while (x <= size) {
-                tree[x] += val;
-                x += x & (-x);
+    public:
+        // add val to the i-th element
+        // 1-indexed, i can take values in [1, size]
+        void add(long val, int i) {
+            while (i <= size) {
+                tree[i] += val;
+                i += i & (-i);
             }
         }
-    public:
-        fenwick(int size, const long array[]){
+        fenwick(int size, const long array[]) : size(size){
             tree = new long[size + 1];
             memset(tree, 0, sizeof(long) * (size + 1));
             for (int i = 1; i <= size; i++) {
-                add(array[i], i, size);
+                add(array[i], i);
             }
         }
-        long sum(int x) {
+        long sum(int i) {
             long res = 0;
-            while (x >= 1) {
-                res += tree[x];
-                x -= x & (-x);
+            while (i >= 1) {
+                res += tree[i];
+                i -= i & (-i);
             }
             return res;
         }
