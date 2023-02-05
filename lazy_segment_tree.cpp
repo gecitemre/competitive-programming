@@ -55,15 +55,6 @@ private:
         }
         lazy[node] = 0;
     }
-
-public:
-    min_lst(int size, const long array[]) : size(size)
-    {
-        tree = new long[4 * size + 1];
-        lazy = new long[4 * size + 1];
-        memset(lazy, 0, (4 * size + 1) * sizeof(long));
-        build(1, 0, size - 1, array);
-    }
     long _query(int node, int start, int end, int l, int r)
     {
         if (start > r || end < l)
@@ -79,6 +70,15 @@ public:
         }
         int mid = (start + end) / 2;
         return min(_query(2 * node, start, mid, l, r), _query(2 * node + 1, mid + 1, end, l, r));
+    }
+
+public:
+    min_lst(int size, const long array[]) : size(size)
+    {
+        tree = new long[4 * size + 1];
+        lazy = new long[4 * size + 1];
+        memset(lazy, 0, (4 * size + 1) * sizeof(long));
+        build(1, 0, size - 1, array);
     }
     void increase(int l, int r, long val)
     {
