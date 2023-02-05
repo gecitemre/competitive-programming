@@ -3,7 +3,7 @@ using namespace std;
 
 // Segment Tree supports O(logN) point updates and O(logN) range queries.
 
-class min_lst
+class min_segment_tree
 {
 private:
     int size;
@@ -58,7 +58,7 @@ private:
     }
 
 public:
-    min_lst(int size, const long array[]) : size(size)
+    min_segment_tree(int size, const long array[]) : size(size)
     {
         tree = new long[4 * size + 1];
         build(1, 0, size - 1, array);
