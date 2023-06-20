@@ -2,12 +2,17 @@
 using namespace std;
 
 // Segment Tree supports O(logN) point updates and O(logN) range queries.
+struct segment_tree_config {
+    long empty_value;
+    function<long(long, long)> combine;
+};
 
-class min_segment_tree
+class segment_tree
 {
 private:
     int size;
     long *tree;
+    segment_tree_config config;
     void build(int node, int start, int end, const long array[])
     {
         if (start == end)
@@ -19,7 +24,7 @@ private:
             int mid = (start + end) / 2;
             build(2 * node, start, mid, array);
             build(2 * node + 1, mid + 1, end, array);
-            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+            tree[node] = config.combine(tree[2 * node], tree[2 * node + 1]);
         }
     }
     void _update(int node, int start, int end, int pos, long val)
@@ -39,14 +44,14 @@ private:
             {
                 _update(2 * node + 1, mid + 1, end, pos, val);
             }
-            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
+            tree[node] = config.combine(tree[2 * node], tree[2 * node + 1]);
         }
     }
     long _query(int node, int start, int end, int l, int r)
     {
         if (start > r || end < l)
         {
-            return LONG_MAX;
+            return config.empty_value;
         }
 
         if (start >= l && end <= r)
@@ -54,13 +59,13 @@ private:
             return tree[node];
         }
         int mid = (start + end) / 2;
-        return min(_query(2 * node, start, mid, l, r), _query(2 * node + 1, mid + 1, end, l, r));
+        return config.combine(_query(2 * node, start, mid, l, r), _query(2 * node + 1, mid + 1, end, l, r));
     }
 
 public:
-    min_segment_tree(int size, const long array[]) : size(size)
+    segment_tree(int size, const long array[], segment_tree_config config) : size(size), config(config)
     {
-        tree = new long[4 * size + 1];
+        tree = new long[4 * size];
         build(1, 0, size - 1, array);
     }
     void update(int pos, long val)
@@ -73,5 +78,21 @@ public:
     }
 };
 
-// for other types of segment trees, small changes will be required, such as using another funtion instead of min and changing default return value.
-// Note: This code is not tested.
+segment_tree_config sum_config = {
+    0,
+    [](long a, long b) -> long {
+        return a + b;
+    }};
+
+segment_tree_config min_config = {
+    INT_MAX,
+    [](long a, long b) -> long {
+        return min(a, b);
+    }};
+
+segment_tree_config max_config = {
+    INT_MIN,
+    [](long a, long b) -> long {
+        return max(a, b);
+    }};
+
