@@ -2,20 +2,18 @@
 using namespace std;
 
 // Segment Tree supports O(logN) point updates and O(logN) range queries.
-template <typename T>
 struct segment_tree_config {
-    T empty_value;
-    function<T(T, T)> combine;
+    long empty_value;
+    function<long(long, long)> combine;
 };
 
-template <typename T>
 class segment_tree
 {
 private:
     int size;
-    T *tree;
+    long *tree;
     segment_tree_config config;
-    void build(int node, int start, int end, const T array[])
+    void build(int node, int start, int end, const long array[])
     {
         if (start == end)
         {
@@ -29,7 +27,7 @@ private:
             tree[node] = config.combine(tree[2 * node], tree[2 * node + 1]);
         }
     }
-    void _update(int node, int start, int end, int pos, T val)
+    void _update(int node, int start, int end, int pos, long val)
     {
         if (start == end)
         {
@@ -49,7 +47,7 @@ private:
             tree[node] = config.combine(tree[2 * node], tree[2 * node + 1]);
         }
     }
-    T _query(int node, int start, int end, int l, int r)
+    long _query(int node, int start, int end, int l, int r)
     {
         if (start > r || end < l)
         {
@@ -65,34 +63,34 @@ private:
     }
 
 public:
-    segment_tree(int size, const T array[], segment_tree_config config) : size(size), config(config)
+    segment_tree(int size, const long array[], segment_tree_config config) : size(size), config(config)
     {
-        tree = new T[4 * size];
+        tree = new long[4 * size];
         build(1, 0, size - 1, array);
     }
-    void update(int pos, T val)
+    void update(int pos, long val)
     {
         _update(1, 0, size - 1, pos, val);
     }
-    T query(int l, int r)
+    long query(int l, int r)
     {
         return _query(1, 0, size - 1, l, r);
     }
 };
 
-segment_tree_config<long> sum_config = {
+segment_tree_config sum_config = {
     0,
     [](long a, long b) -> long {
         return a + b;
     }};
 
-segment_tree_config<long> min_config = {
+segment_tree_config min_config = {
     INT_MAX,
     [](long a, long b) -> long {
         return min(a, b);
     }};
 
-segment_tree_config<long> max_config = {
+segment_tree_config max_config = {
     INT_MIN,
     [](long a, long b) -> long {
         return max(a, b);
